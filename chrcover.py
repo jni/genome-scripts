@@ -27,6 +27,7 @@ chr_lens = { # hg19 coordinates
     'chrY' :  59373566
 }
 
+
 def get_coverage(bed_fn, lens=chr_lens):
     """Get a set of chromosomes as bool arrays of coverage.
 
@@ -44,14 +45,14 @@ def get_coverage(bed_fn, lens=chr_lens):
     chrs = {}
     n_skipped = 0
     for chr_name in lens:
-        chrs[chr_name] = np.zeros(lens[chr_name] + 1, np.bool)
+        chrs[chr_name] = np.zeros(lens[chr_name], np.bool)
     with open(bed_fn, 'r') as bed:
         for line in bed:
             line = line.split('\t')
             name = line[0]
             start, end = int(line[1]), int(line[2])
             try:
-                chrs[name][start:end+1] = True
+                chrs[name][start:end] = True
             except KeyError:
                 n_skipped += 1
     print n_skipped
