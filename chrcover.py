@@ -1,3 +1,4 @@
+import argparse
 import numpy as np
 
 chr_lens = { # hg19 coordinates
@@ -26,6 +27,8 @@ chr_lens = { # hg19 coordinates
     'chrX' : 155270560,
     'chrY' :  59373566
 }
+
+genome_length = np.sum(chr_lens.values())
 
 
 def get_coverage(bed_fn, lens=chr_lens):
@@ -99,3 +102,26 @@ def number_of_bases_covered(cover):
     n = sum(map(np.sum, cover.values()))
     return n
 
+
+def main():
+    """Run a few length or intersection calculations on human BED files.
+    """
+    parser = argparse.ArgumentParser(
+        description='Compute coverage and other stats of BED files.')
+    parser.add_argument('bed_files', nargs='+', metavar='BEDFILE',
+                        help='One or more BED files.')
+    args = parser.parse_args()
+    beds = map(get_coverage, args.bed_files)
+    if len(beds) > 1:
+        intersect = reduce(overlap_coverages, beds)
+        beds.append(intersect)
+        args.bed_files.append('intersect')
+    bases = map(number_of_bases_covered, beds)
+    percents = map(lambda x: 100 * float(x) / genome_length, bases)
+    print "filename, number of bases, percent of genome"
+    for fn, base, perc in zip(args.bed_files, bases, percents):
+        print fn, base, '%.2f' % perc
+
+
+if __name__ == '__main__':
+    main()
