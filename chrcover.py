@@ -1,6 +1,6 @@
 import numpy as np
 
-chr_lens = {
+chr_lens = { # hg19 coordinates
     'chr1' : 249250621,
     'chr2' : 243199373,
     'chr3' : 198022430,
