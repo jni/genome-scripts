@@ -1,4 +1,5 @@
 import argparse
+import functools as ft
 import numpy as np
 
 from tosi import to_si
@@ -33,7 +34,7 @@ chr_lens = { # hg19 coordinates
 genome_length = np.sum(chr_lens.values())
 
 
-def get_coverage(bed_fn, lens=chr_lens):
+def get_coverage(bed_fn, lens=chr_lens, verbose=False):
     """Get a set of chromosomes as bool arrays of coverage.
 
     Parameters
@@ -42,6 +43,8 @@ def get_coverage(bed_fn, lens=chr_lens):
         Filename of a BED file.
     lens : {string: int}, optional
         A map of chromosome names to lengths, to build the bool arrays.
+    verbose : bool, optional
+        Print out error information
 
     Returns
     -------
@@ -49,6 +52,7 @@ def get_coverage(bed_fn, lens=chr_lens):
     """
     chrs = {}
     n_skipped = 0
+    n_total = 0
     for chr_name in lens:
         chrs[chr_name] = np.zeros(lens[chr_name], np.bool)
     with open(bed_fn, 'r') as bed:
@@ -60,7 +64,9 @@ def get_coverage(bed_fn, lens=chr_lens):
                 chrs[name][start:end] = True
             except KeyError:
                 n_skipped += 1
-    print n_skipped
+            n_total += 1
+    if verbose:
+        print "Skipped", n_skipped, "of", n_total, "lines"
     return chrs
 
 
@@ -112,8 +118,11 @@ def main():
         description='Compute coverage and other stats of BED files.')
     parser.add_argument('bed_files', nargs='+', metavar='BEDFILE',
                         help='One or more BED files.')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='Print runtime information')
     args = parser.parse_args()
-    beds = map(get_coverage, args.bed_files)
+    get_coverage_v = ft.partial(get_coverage, verbose=args.verbose)
+    beds = map(get_coverage_v, args.bed_files)
     if len(beds) > 1:
         intersect = reduce(overlap_coverages, beds)
         beds.append(intersect)
