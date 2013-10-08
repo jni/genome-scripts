@@ -1,6 +1,8 @@
 import argparse
 import numpy as np
 
+from tosi import to_si
+
 chr_lens = { # hg19 coordinates
     'chr1' : 249250621,
     'chr2' : 243199373,
@@ -120,7 +122,7 @@ def main():
     percents = map(lambda x: 100 * float(x) / genome_length, bases)
     print "filename, number of bases, percent of genome"
     for fn, base, perc in zip(args.bed_files, bases, percents):
-        print fn, base, '%.2f' % perc
+        print fn, to_si(base), '%.2f' % perc
 
 
 if __name__ == '__main__':
