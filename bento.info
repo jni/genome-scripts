@@ -3,9 +3,13 @@ Author: Juan Nunez-Iglesias <juan.n@unimelb.edu.au>
 Summary: Tools for genomics manipulations
 
 Library:
-    Modules: chrcover, _tosi
+    Modules: chrcover, chrcover2, _tosi
 
 Executable: chrcover
     Module: chrcover
+    Function: main
+
+Executable: chrcover2
+    Module: chrcover2
     Function: main
 
