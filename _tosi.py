@@ -9,11 +9,14 @@ def to_si(d):
     incPrefixes = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
     decPrefixes = ['m', 'µ', 'n', 'p', 'f', 'a', 'z', 'y']
 
-    degree = int(math.floor(math.log10(math.fabs(d)) / 3))
+    if d != 0:
+        degree = int(math.floor(math.log10(math.fabs(d)) / 3))
+    else:
+        degree = 0
 
     prefix = ''
 
-    if degree!=0:
+    if degree != 0:
         ds = degree/math.fabs(degree)
         if ds == 1:
             if degree - 1 < len(incPrefixes):
