@@ -29,7 +29,11 @@ def get_coverage(bedtool, pred=None):
         The merged segments in `bedtool`.
     """
     bedtool = bed.BedTool(bedtool)
-    return bed.BedTool(bedtool.sort().merge().filter(pred))
+    bedtool = bedtool.sort().merge()
+    if pred is None:
+        pred = lambda x: True
+    merge = bedtool.filter(pred).saveas()
+    return merge
 
 
 def overlap_coverages(cover1, cover2):
