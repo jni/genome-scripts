@@ -96,8 +96,8 @@ def main():
     parser.add_argument('-o', '--output', metavar='FN_OUT',
                         help='Save the intersection file.')
     args = parser.parse_args()
-    get_coverage_v = ft.partial(get_coverage, in_mapped_contig)
-    beds = map(get_coverage_v, args.bed_files)
+    get_coverage_chrom = ft.partial(get_coverage, pred=in_mapped_contig)
+    beds = map(get_coverage_chrom, args.bed_files)
     if len(beds) > 1:
         intersect = reduce(overlap_coverages, beds)
         beds.append(intersect)
