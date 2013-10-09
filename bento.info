@@ -1,0 +1,11 @@
+Name: genome-scripts
+Author: Juan Nunez-Iglesias <juan.n@unimelb.edu.au>
+Summary: Tools for genomics manipulations
+
+Library:
+    Modules: chrcover, _tosi
+
+Executable: chrcover
+    Module: chrcover
+    Function: main
+

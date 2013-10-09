@@ -2,7 +2,7 @@ import argparse
 import functools as ft
 import numpy as np
 
-from tosi import to_si
+from _tosi import to_si
 
 chr_lens = { # hg19 coordinates
     'chr1' : 249250621,
