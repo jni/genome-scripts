@@ -9,6 +9,24 @@ import argparse
 
 import pybedtools as bt
 
+
+def start_subtract_one(ival):
+    """Subtract 1 to the start of an Interval.
+
+    Parameters
+    ----------
+    ival : Interval object
+        The interval to be modified.
+
+    Returns
+    -------
+    ival0 : Interval object
+        The modified interval.
+    """
+    ival.start -= 1
+    return ival
+
+
 def one_to_zero_index(bed):
     """Convert a one-based BedTool object to a zero-based one.
 
@@ -22,9 +40,7 @@ def one_to_zero_index(bed):
     bed0 : BedTool object
         The modified BED object.
     """
-    bed0 = bt.BedTool(bed)
-    for ival in bed0:
-        ival.start -= 1
+    bed0 = bed.each(start_subtract_one)
     return bed0
 
 
