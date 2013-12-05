@@ -45,7 +45,7 @@ def one_to_zero_index(bed):
 
 
 def main():
-    """Run a few length or intersection calculations on human BED files.
+    """Convert FAVR-indexed to BED-indexed files.
     """
     parser = argparse.ArgumentParser(
         description='Compute coverage and other stats of BED files.')
@@ -56,9 +56,10 @@ def main():
     args = parser.parse_args()
     for fn in args.bed_files:
         b = bt.BedTool(fn)
-        b0 = one_to_zero_index(b)
+        b0 = favr_to_zero_index(b)
         b0.saveas(fn + args.suffix)
 
 
 if __name__ == '__main__':
     main()
+
