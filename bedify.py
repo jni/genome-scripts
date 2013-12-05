@@ -10,8 +10,30 @@ import argparse
 import pybedtools as bt
 
 
+def is_insertion(ival):
+    """Determine whether an interval represents an insertion variant.
+
+    Parameters
+    ----------
+    ival : Interval object
+        The interval being evaluated.
+
+    Returns
+    -------
+    is_ins : bool
+        ``True`` if `ival` represents an insertion.
+
+    Notes
+    -----
+    This function assumes a FAVR formatted file, with variant type noted
+    in the 18th column (0-indexed).
+    """
+    is_ins = ival.fields[18].endswith('insertion')
+    return is_ins
+
+
 def start_subtract_one(ival):
-    """Subtract 1 to the start of an Interval.
+    """Subtract 1 to the start of an Interval, unless it is an insertion.
 
     Parameters
     ----------
@@ -23,11 +45,12 @@ def start_subtract_one(ival):
     ival0 : Interval object
         The modified interval.
     """
-    ival.start -= 1
+    if not is_insertion(ival):
+        ival.start -= 1
     return ival
 
 
-def one_to_zero_index(bed):
+def favr_to_zero_index(bed):
     """Convert a one-based BedTool object to a zero-based one.
 
     Parameters
